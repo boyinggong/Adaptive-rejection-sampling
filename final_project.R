@@ -1,6 +1,6 @@
 # Final Project.
 
-simulate_things <- function(g,n) {
+simulate_things <- function(g, n) {
 
 sampled_values <- rep(NaN,n)
 i <- 1
@@ -9,16 +9,9 @@ BIG_NEG_NUM <- -1e309
   
 z <- seq(from=-5, to=5, by=.01)
 
-# g is the distribution
-# h = log(g)
-# dh is monotonically decreasing
-# abscissae - tbd...
-
 initial_domain = c(-3,3)
-
 library(mosaic)
 
-h <- function(x) { return(log(g(x))) }
 dh <- function(x) {
   x <- as.numeric(x)
   return(mosaic::D(log(g(x)) ~ x)(x))
@@ -51,124 +44,181 @@ while (left_point_set == FALSE || right_point_set == FALSE) {
 # At this point, we have the start points:
 # u, s, l are next
 
-
-get_zj <- function(dh, h, xs)
+get_zj <- function(x_values, y_values, slopes)
 {
-  zj <- rep(0, length(xs)-1)
+  zj <- rep(0, length(x_values)-1)
   for (i in seq(length(zj)))
   {
-      zj[i] <- (h(xs[i+1]) - h(xs[i]) - 
-           (xs[i+1] * dh(xs[i+1])) + 
-           (xs[i] * dh(xs[i]))) /
-           (dh(xs[i]) - dh(xs[i+1]))
+      zj[i] <- (y_values[i+1] - y_values[i] - 
+           (x_values[i+1] * slopes[i+1]) + 
+           (x_values[i] * slopes[i])) /
+           (slopes[i] - slopes[i+1])
   }
   return(zj)
 }
 
-upper_piecewise <- function(x,
-                            x_intercepts,
-                            h, dh, domains) {
-
-  domains = sort(c(domains, get_zj(dh, h, x_intercepts)))
-  slopes = dh(x_intercepts)
-  y_intercepts = h(x_intercepts)
-  
-  print("Domains, slopes, y intercepts, x intercepts")
-  print(domains)
-  print(slopes)
-  print(y_intercepts)
-  print(x_intercepts)
-  
+upper_piecewise <- function(x, x_intercepts, y_values, slopes, domains) {
   fx <- 0
   for (i in seq(length(domains)-1)) {
-     fx <- fx + 
-       (x > domains[i] & x <= domains[i+1]) * 
-       (((x - x_intercepts[i]) * slopes[i]) + y_intercepts[i])
+    fx <- fx + 
+      (x > domains[i] & x <= domains[i+1]) * 
+      (((x - x_intercepts[i]) * slopes[i]) + y_values[i])
   }
   return(fx)
 }
 
-lower_piecewise <- function(x, domains, h) {
-  ux <- (-1e100) * (x < domains[1]) +
-   (-1e100) * (x > domains[length(domains)])
+exp_upper_piecewise <- function(x, x_intercepts, y_values, slopes, domains) {
+  fx <- 0
   for (i in seq(length(domains)-1)) {
-    ux <- ux + (x > domains[i] & x <= domains[i+1]) * 
-      ((domains[i+1] - x) * h(domains[i]) + 
-       (x - domains[i]) * h(domains[i+1])) / 
-       (domains[i+1] - domains[i])
+    fx <- fx + 
+      (x > domains[i] & x <= domains[i+1]) * 
+      (((x - x_intercepts[i]) * slopes[i]) + y_values[i])
+  }
+  return(exp(fx))
+}
+
+lower_piecewise <- function(x, x_values, y_values, domains) {
+  ux <- ((x < x_values[1]) | (x > x_values[length(x_values)])) * -100
+  for (i in seq(length(my_points)-1)) {
+       ux <- ux + ((x > x_values[i]) & (x <= x_values[i+1])) * 
+         ((x_values[i+1] - x) * y_values[i] + 
+       (x - x_values[i]) * y_values[i+1]) / 
+       (x_values[i+1] - x_values[i])
   }
   return(ux)
 }
 
-exp_lower_piecewise <- function(x, domains,
-                            h) {
-  ux <- (-1e100) * (x < domains[1]) +
-    (-1e100) * (x > domains[length(domains)])
-  for (i in seq(length(domains)-1)) {
-    ux <- ux + (x > domains[i] & x <= domains[i+1]) * 
-      ((domains[i+1] - x) * h(domains[i]) + 
-         (x - domains[i]) * h(domains[i+1])) / 
-      (domains[i+1] - domains[i])
+sk <- function(x,my_points,my_values,my_slopes,my_domains) {
+  n <- length(my_domains)-1
+  integrals <- rep(NaN, n)
+  for (i in seq(n))
+  {
+    a  <- my_domains[i]
+    b  <- my_domains[i+1]
+    xi <- my_points[i]
+    yi <- my_values[i]
+    k  <- my_slopes[i]
+    integrals[i] <- ((exp(yi + (k * (b - xi))) - exp(yi + (k * (a - xi)))) / k)
   }
-  return(exp(ux))
-}
-
-sk <- function(x,ltr,my_h,integration_range) {
-    a <- exp_lower_piecewise(x,ltr,my_h) 
-    b <- integrate(exp_lower_piecewise, lower=integration_range[1], 
-               upper=integration_range[2], domains=ltr,
-               h=my_h)$value
-    #print(a)
-    return(a / b)
+  return(integrals)
 }
 
 dom <- seq(from=-5, to=5, by=0.01)
 
-x <- seq(-10, 10, 0.01)
+x <- seq(-100, 100, 0.001)
+
 my_points <- c(x1,x2)
-# my_slopes <- c(v1,v2)
+my_slopes <- dh(my_points)
+my_values <- h(my_points)
+
 total_range <- c(-Inf, Inf)
 
-while (is.nan(sampled_values[length(sampled_values)]))
+total_chosen <- 1
+
+domains <- sort(c(total_range, get_zj(x_values = my_points, 
+                                  y_values = my_values, 
+                                  slopes = my_slopes)))
+
+while (total_chosen <= n)
 {
-fx <- upper_piecewise(x, my_points, h, dh, total_range)
+#fx <- upper_piecewise(x = x,
+#                      x_intercepts = my_points, 
+#                      y_values = my_values,
+#                      slopes = my_slopes,
+#                      domains = domains)
 
-# lower_total_range <- c(x1, get_zj(dh, h, my_points), x2)
+#ux <- lower_piecewise(x = x,
+#             x_values = my_points,
+#             y_values = my_values,
+#             domains = domains)
 
-ux <- lower_piecewise(x, my_points, h)
+# percentages <- rep(0, length(z_points)+1)
 
-sk_vals <- sk(x,my_points,h,total_range)
 
-x_star <- sample(sk_vals,1)
-w <- runif(min=0,max=1,n=1)
-#if (is.nan((lower_piecewise(x_star, lower_total_range, h) - upper_piecewise(total_range, x_star, my_slopes, my_points, log(g(my_points))))))
-#{
-    print(lower_piecewise(x_star, my_points, h))
-    print(upper_piecewise(x_star, my_points, h, dh, total_range))
-#}
 
-if (w <= (exp(lower_piecewise(x_star, my_points, h) - upper_piecewise(x_star, my_points, h, dh, total_range))))
+integral_values <- sk(x,my_points,my_values,my_slopes,domains)
+normalized_integral_values <- integral_values / sum(integral_values)
+
+# print(normalized_integral_values)
+# print(sum(normalized_integral_values))
+
+cs_normalized_integral_values <- c(0,cumsum(normalized_integral_values))
+# cs_normalized_integral_values <- c(0, cumsum(normalized_integral_values))
+total_integral_values <- integral_values
+
+cu <- integral_values[length(integral_values)]
+
+ur <- runif(min=0,max=1,n=1)
+
+# ri is "region index"
+ri <- min(which(cs_normalized_integral_values <= ur))
+
+ur <- runif(min=0,max=1,n=1)
+
+print("whoa")
+print(length(domains))
+print(domains)
+print(length(total_integral_values))
+
+zi <- domains[ri]
+
+xt <- log(1 + ((my_slopes[ri] * cu *
+                      (ur - cs_normalized_integral_values[ri])) / 
+                      (exp(my_values[ri])))) / my_slopes[ri]
+
+print(xt)
+print((1 + ((my_slopes[ri] * cu *
+               (ur - cs_normalized_integral_values[ri])) / 
+              (exp(my_values[ri])))))
+
+fx <- upper_piecewise(x = xt,
+                      x_intercepts = my_points, 
+                      y_values = my_values,
+                      slopes = my_slopes,
+                      domains = domains)
+
+ux <- lower_piecewise(x = xt,
+                      x_values = my_points,
+                      y_values = my_values,
+                      domains = domains)
+
+
+w <- runif(min = 0, max = 1, n = 1)
+
+if (w <= (exp(ux - fx)))
 {
-  sampled_values[i] <- x_star
-  i <- i + 1
+  sampled_values[total_chosen] <- xt
+  total_chosen <- total_chosen+1
 }
 else {
-  if (w <= (exp(h(x_star) - upper_piecewise(x_star, my_points, h, dh, total_range))))
-  {
-    sampled_values[i] <- x_star
-    i <- i + 1    
-  }
-  # remake T's, sk's, l's, u's
-  my_points <- sort(c(my_points, x_star))
+ if (w <= (exp(h(xt) - fx)))
+ {
+   sampled_values[total_chosen] <- xt
+   total_chosen <- total_chosen+1
+   
+   if (length(my_points) < 100)
+   {
+     my_points <- sort(c(my_points, xt))
+     my_slopes <- dh(my_points)
+     my_values <- h(my_points)
+     domains <- sort(c(total_range, get_zj(x_values = my_points, 
+                                           y_values = my_values, 
+                                           slopes = my_slopes)))
+   }
 }
+}
+
+}
+# print(my_points)
 
 # Plot
-plot(x = x, y = log(dnorm(x)), type="l",ylim=c(-8,3), xlim=c(-2, 2))
-points(x = x, y = fx, type="l", ylim=c(-5,3))
-points(x = x, y = ux, type="l", ylim=c(-5,3))
-}
+# plot(x = x, y = log(dnorm(x)), type="l",ylim=c(-8,3), xlim=c(-4, 4))
+# points(x = x, y = fx, type="l", ylim=c(-5,3))
+# points(x = x, y = ux, type="l", ylim=c(-5,3))
+
 return(sampled_values)
 }
-
-sv <- simulate_things(dnorm,10)
-histogram(sv)
+sv <- simulate_things(dnorm, n = 1000)
+print(length(sv))
+# print(sv)
+histogram(exp(sv))
