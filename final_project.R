@@ -1,6 +1,6 @@
 # Final Project.
 
-simulate_things <- function(g, n) {
+simulate_things <- function(g, my_total_range, n) {
 
 sampled_values <- rep(NaN,n)
 i <- 1
@@ -111,7 +111,7 @@ my_points <- c(x1,x2)
 my_slopes <- dh(my_points)
 my_values <- h(my_points)
 
-total_range <- c(-Inf, Inf)
+total_range <- my_total_range
 
 total_chosen <- 1
 
@@ -121,29 +121,12 @@ domains <- sort(c(total_range, get_zj(x_values = my_points,
 
 while (total_chosen <= n)
 {
-#fx <- upper_piecewise(x = x,
-#                      x_intercepts = my_points, 
-#                      y_values = my_values,
-#                      slopes = my_slopes,
-#                      domains = domains)
-
-#ux <- lower_piecewise(x = x,
-#             x_values = my_points,
-#             y_values = my_values,
-#             domains = domains)
-
-# percentages <- rep(0, length(z_points)+1)
-
-
 
 integral_values <- sk(x,my_points,my_values,my_slopes,domains)
 normalized_integral_values <- integral_values / sum(integral_values)
 
-# print(normalized_integral_values)
-# print(sum(normalized_integral_values))
 
-cs_normalized_integral_values <- c(0,cumsum(normalized_integral_values))
-# cs_normalized_integral_values <- c(0, cumsum(normalized_integral_values))
+cs_normalized_integral_values <- c(cumsum(normalized_integral_values))
 total_integral_values <- integral_values
 
 cu <- integral_values[length(integral_values)]
@@ -151,25 +134,21 @@ cu <- integral_values[length(integral_values)]
 ur <- runif(min=0,max=1,n=1)
 
 # ri is "region index"
-ri <- min(which(cs_normalized_integral_values <= ur))
-
+ri <- min(which(cs_normalized_integral_values >= ur))
+# random variable
 ur <- runif(min=0,max=1,n=1)
-
-print("whoa")
-print(length(domains))
-print(domains)
-print(length(total_integral_values))
-
+# the domain
 zi <- domains[ri]
+s <- my_slopes[ri]
+nrmlztn <- 1/integral_values[ri]
+y <- my_values[ri]
+xc <- my_points[ri]
 
-xt <- log(1 + ((my_slopes[ri] * cu *
-                      (ur - cs_normalized_integral_values[ri])) / 
-                      (exp(my_values[ri])))) / my_slopes[ri]
+xt <- log(((s * ur)/(nrmlztn * exp(y - s * xc))) + exp(s * zi)) / s
 
-print(xt)
-print((1 + ((my_slopes[ri] * cu *
-               (ur - cs_normalized_integral_values[ri])) / 
-              (exp(my_values[ri])))))
+# print("Xt and inside")
+# print(xt)
+# print(((s * ur)/(nrmlztn * exp(y - s * xc))) + exp(s * zi))
 
 fx <- upper_piecewise(x = xt,
                       x_intercepts = my_points, 
@@ -209,16 +188,12 @@ else {
 }
 
 }
-# print(my_points)
-
-# Plot
-# plot(x = x, y = log(dnorm(x)), type="l",ylim=c(-8,3), xlim=c(-4, 4))
-# points(x = x, y = fx, type="l", ylim=c(-5,3))
-# points(x = x, y = ux, type="l", ylim=c(-5,3))
 
 return(sampled_values)
 }
-sv <- simulate_things(dnorm, n = 1000)
+sv <- simulate_things(dnorm, c(-Inf,Inf), n = 10000)
 print(length(sv))
 # print(sv)
-histogram(exp(sv))
+histogram(sv, col='blue', prob=TRUE, bw=.5)
+x<- seq(0,4,.01)
+
