@@ -8,69 +8,52 @@ library(mosaic)
 # Get the intersection points (the 'z_i' defined by the paper)
 get_zj <- function(x_values, y_values, slopes)
 {
-  zj <- rep(0, length(x_values)-1)
-  for (i in seq(length(zj)))
-  {
-    zj[i] <- (y_values[i+1] - y_values[i] - 
-                (x_values[i+1] * slopes[i+1]) + 
-                (x_values[i] * slopes[i])) /
-      (slopes[i] - slopes[i+1])
-  }
+  n <- length(x_values)
+  zj <- (y_values[2:n] - y_values[1:(n-1)] -
+           (x_values[2:n] * slopes[2:n]) +
+           (x_values[1:(n-1)] * slopes[1:(n-1)])) /
+    (slopes[1:(n-1)] - slopes[2:n])
   return(zj)
 }
 
 # The upper piecewise function
 upper_piecewise <- function(x, x_intercepts, y_values, slopes, domains) {
-  fx <- 0
-  for (i in seq(length(domains)-1)) {
-    fx <- fx + 
-      (x > domains[i] & x <= domains[i+1]) * 
-      (((x - x_intercepts[i]) * slopes[i]) + y_values[i])
-  }
-  return(fx)
+  n <- length(domains)-1
+  fx <- (x > domains[1:n] & x <= domains[2:(n+1)]) * 
+    (((x - x_intercepts[1:n]) * slopes[1:n]) + y_values[1:n])
+  return(sum(fx))
 }
 
 # The exponential of the upper piecewise function
 exp_upper_piecewise <- function(x, x_intercepts, y_values, slopes, domains) {
-  fx <- 0
-  for (i in seq(length(domains)-1)) {
-    fx <- fx + 
-      (x > domains[i] & x <= domains[i+1]) * 
-      (((x - x_intercepts[i]) * slopes[i]) + y_values[i])
-  }
-  return(exp(fx))
+  return(exp(upper_piecewise(x, x_intercepts, y_values, slopes, domains)))
 }
 
 # The s upper bound function (the new pdf from which to sample)
 # returns the integral value of every region (z_i to z_(i+1))
 # note that it is UNNORMALIZED
-sk <- function(x,my_points,my_values,my_slopes,my_domains) {
+sk <- function(x, xi, yi, k, my_domains) {
   n <- length(my_domains)-1
-  integrals <- rep(NaN, n)
-  for (i in seq(n))
-  {
-    a  <- my_domains[i]
-    b  <- my_domains[i+1]
-    xi <- my_points[i]
-    yi <- my_values[i]
-    k  <- my_slopes[i] 
-    integrals[i] <- ((exp(yi + (k * (b - xi))) - exp(yi + (k * (a - xi)))) / k)
-  }
+  integrals <- ((exp(yi + (k * (my_domains[2:(n+1)] - xi))) 
+                 - exp(yi + (k * (my_domains[1:n] - xi)))) / k)
   return(integrals)
 }
 
 # The lower piecewise function
 lower_piecewise <- function(x, x_values, y_values, domains) {
   ux <- ((x < x_values[1]) | (x > x_values[length(x_values)])) * -100
-  for (i in seq(length(x_values)-1)) {
-    ux <- ux + ((x > x_values[i]) & (x <= x_values[i+1])) * 
-      ((x_values[i+1] - x) * y_values[i] + 
-         (x - x_values[i]) * y_values[i+1]) / 
-      (x_values[i+1] - x_values[i])
-  }
-  return(ux)
+  n <- length(x_values)-1
+  u <- ((x > x_values[1:n]) & (x <= x_values[2:(n+1)])) * 
+    ((x_values[2:(n+1)] - x) * y_values[1:n] + 
+       (x - x_values[1:n]) * y_values[2:(n+1)]) / 
+    (x_values[2:(n+1)] - x_values[1:n])
+  return(ux+sum(u))
 }
 
+dh <- function(x,g) {
+  x <- as.numeric(x)
+  return(mosaic::D(log(g(x)) ~ x)(x))
+}
 
 simulate_things <- function(g, my_total_range, n) {
 
@@ -95,11 +78,6 @@ simulate_things <- function(g, my_total_range, n) {
   # do people like this package?  We could use another one.
 
   h <- function(x) { log(g(x)) }
-
-  dh <- function(x,g) {
-    x <- as.numeric(x)
-    return(mosaic::D(log(g(x)) ~ x)(x))
-  }
 
   # have we found our starting points?  Set to false and will become TRUE.
   left_point_set <- FALSE
