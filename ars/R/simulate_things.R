@@ -59,9 +59,6 @@ simulate_things <- function(g, my_total_range, n) {
                 right_point_set <- TRUE
             }
         }
-        # We can take these out later, but they tell me what's going on
-        print(v1)
-        print(v2)
     }
     
     # At this point, we have the start points:
