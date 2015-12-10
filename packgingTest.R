@@ -18,6 +18,8 @@ lines(a <- seq(-4.5, 4.5, by = 0.05), dnorm(a), col='blue')
 plot(density(rnorm(10000)), main = "built-in fuuction")
 lines(a <- seq(-4.5, 4.5, by = 0.05), dnorm(a), col='blue')
 
+par(mfrow = c(1, 1))
+legend(4.5,.35,lty=c(1,1),text.font=0.1,cex=0.5,c("sampled","true density"),col = c("black","blue"))
 dev.off()
 
 ## qq plot
