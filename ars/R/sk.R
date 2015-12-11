@@ -1,17 +1,16 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Generate a time series of fractional Brownian motion.
+#'
+#' This function generatea a time series of one dimension fractional Brownian motion.
+#' adapted from http://www.mathworks.com.au/matlabcentral/fileexchange/38935-fractional-brownian-motion-generator .
+#'
+#' @param hurst the hurst index, with the default value 0.71
+#' @param n the number of points between 0 and 1 that will be generated, with the default value 100
+#' @export
+#' @examples
+#' fbm()
+#' plot(fbm())
+#' d <- fbm(hurst=0.2, n=1000)
+#' plot(d)
 
 sk <- function(x, xi, yi, k, my_domains) {
     n <- length(my_domains)-1
