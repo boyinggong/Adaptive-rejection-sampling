@@ -1,20 +1,19 @@
-#' Generate a time series of fractional Brownian motion.
+#' Piecewise integrals
 #'
-#' This function generatea a time series of one dimension fractional Brownian motion.
-#' adapted from http://www.mathworks.com.au/matlabcentral/fileexchange/38935-fractional-brownian-motion-generator .
+#' This function calculate the piecewise integral of the upper hull function.
 #'
-#' @param hurst the hurst index, with the default value 0.71
-#' @param n the number of points between 0 and 1 that will be generated, with the default value 100
+#' @param xj sorted points in T
+#' @param hj log density evaluated at point xj
+#' @param dhj slopes of piecewise upper hull
+#' @param my_domains intersection points of upper hull
 #' @export
 #' @examples
-#' fbm()
-#' plot(fbm())
-#' d <- fbm(hurst=0.2, n=1000)
-#' plot(d)
+#' sk(xj, hj, dhj, my_domains)
+#' sk(c(-1/2, 1/2), c(-1/2, 1/2), c(-1, 1), c(-1, 0,  1))
 
-sk <- function(x, xi, yi, k, my_domains) {
+sk <- function(xj, hj, dhj, my_domains) {
     n <- length(my_domains)-1
-    integrals <- ((exp(yi + (k * (my_domains[2:(n+1)] - xi)))
-    - exp(yi + (k * (my_domains[1:n] - xi)))) / k)
+    integrals <- ((exp(hj + (dhj * (my_domains[2:(n+1)] - xj)))
+    - exp(hj + (dhj * (my_domains[1:n] - xj)))) / dhj)
     return(integrals)
 }

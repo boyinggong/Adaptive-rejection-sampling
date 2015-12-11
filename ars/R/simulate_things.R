@@ -1,17 +1,14 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Generate random numbers using adaptive rejection sampling
+#'
+#' This function generate random numbers from given distribution using adaptive rejection sampling method.
+#'
+#' @param g the probability density distribution to sample from
+#' @param my_total_range support of the probability density distribution
+#' @param n number of observations.
+#' @export 
+#' @examples
+#' simulate_things(dnorm, c(-Inf,Inf), n = 10000)
+
 
 simulate_things <- function(g, my_total_range, n) {
     
@@ -85,7 +82,7 @@ simulate_things <- function(g, my_total_range, n) {
     # Don't stop until we have as many samples as we required
     while (total_chosen <= n){
         # Get the integral values, then be sure to have a normalized variant
-        integral_values <- sk(x,my_points,my_values,my_slopes,domains)
+        integral_values <- sk(my_points,my_values,my_slopes,domains)
         normalized_integral_values <- integral_values / sum(integral_values)
         
         # Now get the cumsum of the normal values
