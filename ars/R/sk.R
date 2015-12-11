@@ -6,7 +6,6 @@
 #' @param hj log density evaluated at point xj
 #' @param dhj slopes of piecewise upper hull
 #' @param my_domains intersection points of upper hull
-#' @export
 #' @examples
 #' sk(xj, hj, dhj, my_domains)
 #' sk(c(-1/2, 1/2), c(-1/2, 1/2), c(-1, 1), c(-1, 0,  1))
