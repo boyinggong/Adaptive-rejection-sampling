@@ -2,23 +2,24 @@
 % Please edit documentation in R/sk.R
 \name{sk}
 \alias{sk}
-\title{Generate a time series of fractional Brownian motion.}
+\title{Piecewise integrals}
 \usage{
-sk(x, xi, yi, k, my_domains)
+sk(xj, hj, dhj, my_domains)
 }
 \arguments{
-\item{hurst}{the hurst index, with the default value 0.71}
+\item{xj}{sorted points in T}
 
-\item{n}{the number of points between 0 and 1 that will be generated, with the default value 100}
+\item{hj}{log density evaluated at point xj}
+
+\item{dhj}{slopes of piecewise upper hull}
+
+\item{my_domains}{intersection points of upper hull}
 }
 \description{
-This function generatea a time series of one dimension fractional Brownian motion.
-adapted from http://www.mathworks.com.au/matlabcentral/fileexchange/38935-fractional-brownian-motion-generator .
+This function calculate the piecewise integral of the upper hull function.
 }
 \examples{
-fbm()
-plot(fbm())
-d <- fbm(hurst=0.2, n=1000)
-plot(d)
+sk(xj, hj, dhj, my_domains)
+sk(c(-1/2, 1/2), c(-1/2, 1/2), c(-1, 1), c(-1, 0,  1))
 }
 
