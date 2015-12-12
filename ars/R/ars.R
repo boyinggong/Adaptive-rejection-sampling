@@ -7,10 +7,10 @@
 #' @param n number of observations.
 #' @export 
 #' @examples
-#' simulate_things(dnorm, c(-Inf,Inf), n = 10000)
+#' ars(dnorm, c(-Inf,Inf), n = 10000)
 
 
-simulate_things <- function(g, my_total_range, n) {
+ars <- function(g, my_total_range, n) {
     
     MAX_HOLDING <- 1000
     
