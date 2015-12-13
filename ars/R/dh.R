@@ -4,14 +4,11 @@
 #'
 #' @param xi sorted points in T, which contains k abscissae in the domain D
 #' @param g the density function used to perform the rejection sampling, where g(x) = cf(x). f(x) is the density that we actually want to sample points from
-#' @param leftb left bound of our domain D
-#' @param rightb right bound of our domain D
 #' @examples
 #' dh(xi,g,leftb,rightb)
-#' dh(c(1,2,3),exp,-4,4)
+#' dh(c(1,2,3),dnorm,-4,4)
 
-dh <- function(xi,g,leftb,rightb) {
-    if (xi < leftb || xi >rightb) stop("inputs are not defined on the given domain")
+dh <- function(xi,g) {
     xi <- as.numeric(xi)
     grad <- numericDeriv(quote(log(dnorm(xi))),"xi")
     return(attr(grad,"gradient"))

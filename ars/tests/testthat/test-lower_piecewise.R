@@ -1,9 +1,9 @@
 context("Lower piecewise function")
 
-#test_that("special cases are correct", {
-#    print("special cases are correct")
-#    expect_equal(lower_piecewise(2,c(1,2,3,4), c(5,6,7,8), c(-4,4)),6)
-#})
+test_that("special cases are correct", {
+    print("special cases are correct")
+    expect_equal(lower_piecewise(2,c(1,2,3,4), c(5,6,7,8), c(-4,4)),6)
+})
 
 test_that("throw errors for inputs error", {
     print("throw errors when vector length is not consistent")
