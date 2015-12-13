@@ -12,7 +12,7 @@
 
 lower_piecewise <- function(x, x_values, y_values, domains) {
     if (x > domains[2] | x < domains[1]) stop("inputs are not defined on the given domain")
-    if (length(x_values) != length(y_values) stop("inputs should have the same length")
+    if (length(x_values) != length(y_values)) stop("inputs should have the same length")
     if (length(x_values) <=1 | length(y_values) <=1) stop("input should have a length at least 2")
     ux <- ((x < x_values[1]) | (x > x_values[length(xi)])) * -100
     n <- length(x_values)-1
