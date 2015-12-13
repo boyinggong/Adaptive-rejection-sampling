@@ -4,16 +4,13 @@
 #'
 #' @param xj sorted points in T, which contains k abscissae in the domain D
 #' @param hj evaluated h at xj, where h = log g(x). g is the density function used to perform the rejection sampling
-#' @param slopes slope of h evaluated at xj; it should be the output of dh function calculated at x1 through xk
+#' @param slopes slope of h evaluated at xj; they are the outputs of dh function calculated at x1 through xk
 #' @examples
 #' get_zj(xj, hj, slopes)
 #' get_zj(c(1,2,3), c(4,8,12), c(1, 0,-1))
 
 
 get_zj <- function(xj, hj, slopes) {
-    ### if (any(hj != log(g(xj))) stop("h(x) are not evaluated correctly at abscissae")
-    ### NEED TO CHECK SLOPES?
-    
     if (length(xj) != length(hj) | length(xj) != length(slopes) | length(hj) != length(slopes)) stop("inputs should have the same length")
     if (length(xj) <=1 | length(hj) <=1 | length(slopes) <=1) stop("input should have a length at least 2")
     
