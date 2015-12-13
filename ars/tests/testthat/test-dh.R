@@ -14,5 +14,4 @@ test_that("special cases is correct", {
 test_that("throw errors for inputs error", {
     print("throw errors when input x values are not defined on the given domain")
     expect_error(dh(c(7,8,9),exp,-3,3), "inputs are not defined on the given domain")
-
 })
