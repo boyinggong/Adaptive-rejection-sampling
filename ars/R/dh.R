@@ -10,7 +10,7 @@
 
 dh <- function(xi,g) {
     xi <- as.numeric(xi)
-    grad <- numericDeriv(quote(log(dnorm(xi))),"xi")
+    grad <- numericDeriv(quote(log(g(xi))),"xi")
     return(attr(grad,"gradient"))
 }
 
