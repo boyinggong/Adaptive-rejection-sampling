@@ -1,25 +1,25 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Intersection points zj
+#'
+#' This function returns the intersection points generated from piecewise linear upper hull
+#'
+#' @param xj sorted points in T, which contains k abscissae in the domain D
+#' @param hj evaluated h at xj, where h = log g(x). g is the density function used to perform the rejection sampling
+#' @param slopes slope of h evaluated at xj; it should be the output of dh function calculated at x1 through xk
+#' @examples
+#' get_zj(xj, hj, slopes)
+#' get_zj
 
-# Get the intersection points (the 'z_i' defined by the paper)
-get_zj <- function(x_values, y_values, slopes)
-{
-    n <- length(x_values)
-    zj <- (y_values[2:n] - y_values[1:(n-1)] -
-    (x_values[2:n] * slopes[2:n]) +
-    (x_values[1:(n-1)] * slopes[1:(n-1)])) /
-    (slopes[1:(n-1)] - slopes[2:n])
+
+get_zj <- function(xj, hj, slopes) {
+    ### if (any(hj != log(g(xj))) stop("h(x) are not evaluated correctly at abscissae")
+    ### NEED TO CHECK SLOPES?
+    
+    if (length(xj) != length(hj) | length(xj) != length(slopes) | length(hj) != length(slopes)) stop("inputs should have the same length")
+    if (length(xj) <=1 | length(hj) <=1 | length(slopes) <=1) stop("input should have a length at least 2")
+    
+    n <- length(xj)
+    numerator <- hj[2:n] - hj[1:(n-1)] - (xj[2:n]*slopes[2:n]) + (xj[1:(n-1)]*slopes[1:(n-1)])
+    denominator <- slopes[1:(n-1)] - slopes[2:n]
+    zj <- (numerator/denominator)
     return(zj)
 }
