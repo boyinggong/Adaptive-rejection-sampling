@@ -1,23 +1,22 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Piecewise lower hull
+#'
+#' This function returns the piecewise linear lower hull formed from the chords between adjacent abscissae in Tk
+#'
+#' @param x
+#' @param x_values sorted points in T, which contains k abscissae in the domain D
+#' @param y_values evaluated h at x_values, where h = log g(x). g is the density function used to perform the rejection sampling
+#' @param domains domain D, which contains the lower bound and the upper bound
+#' @examples
+#' lower_piecewise((x, x_values, y_values, domains)
+#' lower_piecewise
 
-# The lower piecewise function
 lower_piecewise <- function(x, x_values, y_values, domains) {
-    ux <- ((x < x_values[1]) | (x > x_values[length(x_values)])) * -100
+    if (x > domains[2] | x < domains[1]) stop("inputs are not defined on the given domain")
+    if (length(x_values) != length(y_values) stop("inputs should have the same length")
+    if (length(x_values) <=1 | length(y_values) <=1) stop("input should have a length at least 2")
+    ux <- ((x < x_values[1]) | (x > x_values[length(xi)])) * -100
     n <- length(x_values)-1
-    u <- ((x > x_values[1:n]) & (x <= x_values[2:(n+1)])) *
+    u <- ((x > x_values[1:n]) & (x <= xi[2:(n+1)])) *
     ((x_values[2:(n+1)] - x) * y_values[1:n] +
     (x - x_values[1:n]) * y_values[2:(n+1)]) /
     (x_values[2:(n+1)] - x_values[1:n])
