@@ -14,9 +14,7 @@ get_zj <- function(xj, hj, slopes) {
     if (length(xj) != length(hj) | length(xj) != length(slopes) | length(hj) != length(slopes)) stop("inputs should have the same length")
     if (length(xj) <=1 | length(hj) <=1 | length(slopes) <=1) stop("input should have a length at least 2")
     
-    n <- length(xj)
-    numerator <- hj[2:n] - hj[1:(n-1)] - (xj[2:n]*slopes[2:n]) + (xj[1:(n-1)]*slopes[1:(n-1)])
-    denominator <- slopes[1:(n-1)] - slopes[2:n]
-    zj <- (numerator/denominator)
+    n <- length(x_values)
+    zj <- (y_values[2:n] - y_values[1:(n-1)] - (x_values[2:n] * slopes[2:n]) + (x_values[1:(n-1)] * slopes[1:(n-1)])) / (slopes[1:(n-1)] - slopes[2:n])
     return(zj)
 }
