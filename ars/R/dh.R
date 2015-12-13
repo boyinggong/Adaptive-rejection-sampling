@@ -1,17 +1,18 @@
+#' Derivative of logarithm of functions
+#'
+#' This function calculate the derivative of h(x), where h(x) is the log of functions
+#'
+#' @param xi sorted points in T, which contains k abscissae in the domain D
+#' @param g the density function used to perform the rejection sampling, where g(x) = cf(x). f(x) is the density that we actually want to sample points from
+#' @param leftb left bound of our domain D
+#' @param rightb right bound of our domain D
+#' @examples
+#' dh(xi,g,leftb,rightb)
+#' dh(c(1,2,3),exp,-4,4)
 
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
-
-
-# calculate the derivative of logarithm of functions
-dh <- function(x,g) {
-    x <- as.numeric(x)
-    return(mosaic::D(log(g(x)) ~ x)(x))
+dh <- function(xi,g,leftb,rightb) {
+    if (xi < leftb || xi >rightb) stop("inputs are not defined on the given domain")
+    xi <- as.numeric(xi)
+    #### NEED TO FIX INPUT G IN ORDER TO GET A DISTRIBUTION FUNCTION
+    return(mosaic::D(log(g(x)) ~ x)(xi))
 }
