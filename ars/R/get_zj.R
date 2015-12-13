@@ -7,7 +7,7 @@
 #' @param slopes slope of h evaluated at xj; it should be the output of dh function calculated at x1 through xk
 #' @examples
 #' get_zj(xj, hj, slopes)
-#' get_zj
+#' get_zj(c(1,2,3), c(4,8,12), c(1, 0,-1))
 
 
 get_zj <- function(xj, hj, slopes) {
