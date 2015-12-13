@@ -13,6 +13,7 @@
 dh <- function(xi,g,leftb,rightb) {
     if (xi < leftb || xi >rightb) stop("inputs are not defined on the given domain")
     xi <- as.numeric(xi)
-    #### NEED TO FIX INPUT G IN ORDER TO GET A DISTRIBUTION FUNCTION
-    return(mosaic::D(log(g(x)) ~ x)(xi))
+    grad <- numericDeriv(quote(log(dnorm(xi))),"xi")
+    return(attr(grad,"gradient"))
 }
+
