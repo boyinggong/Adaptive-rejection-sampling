@@ -8,11 +8,10 @@
 #' @param rightb right bound of our domain D
 #' @examples
 #' dh(xi,g,leftb,rightb)
-#' dh(c(1,2,3),exp,-4,4)
+#' dh(c(1,2,3),dnorm,-4,4)
 
 dh <- function(xi,g,leftb,rightb) {
     if (xi < leftb || xi >rightb) stop("inputs are not defined on the given domain")
     xi <- as.numeric(xi)
-    #### NEED TO FIX INPUT G IN ORDER TO GET A DISTRIBUTION FUNCTION
     return(mosaic::D(log(g(x)) ~ x)(xi))
 }
