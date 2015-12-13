@@ -3,6 +3,7 @@
 #' This function returns the piecewise linear upper hulls from the tangents to h(x) at the abscissae xj in Tk
 #'
 #' @param xj sorted points in T, which contains k abscissae in the domain D
+#' @param x
 #' @param hj evaluated h at xj, where h = log g(x). g is the density function used to perform the rejection sampling
 #' @param slopes slope of h evaluated at xj; it should be the output of dh function calculated at x1 through xk
 #' @param leftb left bound of our domain D
