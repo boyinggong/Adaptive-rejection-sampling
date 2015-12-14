@@ -19,44 +19,53 @@ ars <- function(g, my_total_range, n) {
     # Initialize the counter
     i <- 1
     
+    # DEPRECATED: the least negative number
+    BIG_NEG_NUM <- -1e309
+    
+    z <- seq(from=-5, to=5, by=.01)
+    
     # This is could be set as something else, but it's the range
     # that we need to check to find our first two tangent points
     
     initial_domain = c(-3,3)
     
     # dh(u)/du at some x (= d(log(g(u)))/du at some x)
+    # do people like this package?  We could use another one.
     
     h <- function(x) { log(g(x)) }
     
-#     # have we found our starting points?  Set to false and will become TRUE.
-#     left_point_set <- FALSE
-#     right_point_set <-FALSE
-#     
-#     # To exit the loop, we need to be on other side of the concave up/down
-#     while (left_point_set == FALSE || right_point_set == FALSE) {
-#         # left point must be concave UP
-#         if (left_point_set == FALSE) {
-#             x1 <- runif(n=1, min = initial_domain[1], max=initial_domain[2])
-#             v1 <- dh(x1,g)
-#             if (v1 > 0) {
-#                 left_point_set <- TRUE
-#             }
-#         }
-#         # right point must be concave DOWN
-#         if (right_point_set == FALSE) {
-#             x2 <- runif(n=1, min = initial_domain[1], max=initial_domain[2])
-#             v2 <- dh(x2,g)
-#             if (v2 < 0) {
-#                 right_point_set <- TRUE
-#             }
-#         }
-#     }
-#     
-#     # At this point, we have the start points:
-#     # u, s, l are next
-#     
-#     my_points <- c(x1,x2)
-    my_points <- find_init(g, my_total_range)
+    # have we found our starting points?  Set to false and will become TRUE.
+    left_point_set <- FALSE
+    right_point_set <-FALSE
+    
+    # To exit the loop, we need to be on other side of the concave up/down
+    while (left_point_set == FALSE || right_point_set == FALSE) {
+        # left point must be concave UP
+        if (left_point_set == FALSE) {
+            x1 <- runif(n=1, min = initial_domain[1], max=initial_domain[2])
+            v1 <- dh(x1,g)
+            if (v1 > 0) {
+                left_point_set <- TRUE
+            }
+        }
+        # right point must be concave DOWN
+        if (right_point_set == FALSE) {
+            x2 <- runif(n=1, min = initial_domain[1], max=initial_domain[2])
+            v2 <- dh(x2,g)
+            if (v2 < 0) {
+                right_point_set <- TRUE
+            }
+        }
+    }
+    
+    # At this point, we have the start points:
+    # u, s, l are next
+    
+    dom <- seq(from=-5, to=5, by=0.01)
+    
+    x <- seq(-100, 100, 0.001)
+    
+    my_points <- c(x1,x2)
     my_slopes <- dh(my_points,g)
     my_values <- h(my_points)
     

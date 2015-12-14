@@ -4,22 +4,22 @@
 \alias{upper_piecewise}
 \title{Piecewise linear upper hull}
 \usage{
-upper_piecewise(x, xj, hj, slopes, domains)
+upper_piecewise(x, x_intercepts, y_values, slopes, domains)
 }
 \arguments{
-\item{xj}{sorted points in T, which contains k abscissae in the domain D}
+\item{x_intercepts}{sorted points in T, which contains k abscissae in the domain D}
 
-\item{hj}{evaluated h at xj, where h = log g(x). g is the density function used to perform the rejection sampling}
+\item{y_values}{evaluated h at x_intercepts, where h = log g(x). g is the density function used to perform the rejection sampling}
 
-\item{slopes}{slope of h evaluated at xj; they are the outputs of dh function calculated at x1 through xk}
+\item{slopes}{slope of h evaluated at x_intercepts; they are the outputs of dh function calculated at x1 through xk}
 
 \item{domains}{domain D, which contains the lower bound and the upper bound}
 }
 \description{
-This function returns the piecewise linear upper hulls from the tangents to h(x) at the abscissae xj in Tk
+This function returns the piecewise linear upper hulls from the tangents to h(x) at the abscissae x_intercepts in Tk
 }
 \examples{
-upper_piecewise(x, x_intercepts, hj, slopes, leftb, rightb)
+upper_piecewise(x, x_intercepts, y_values, slopes, domains)
 upper_piecewise(4,c(1,23,3),c(2,1,4),c(-1,0,10),c(-5,5))
 }
 

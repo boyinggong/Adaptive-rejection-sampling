@@ -4,10 +4,10 @@
 \alias{dh}
 \title{Derivative of logarithm of functions}
 \usage{
-dh(xi, g)
+dh(x, g)
 }
 \arguments{
-\item{xi}{sorted points in T, which contains k abscissae in the domain D}
+\item{x}{sorted points in T, which contains k abscissae in the domain D}
 
 \item{g}{the density function used to perform the rejection sampling, where g(x) = cf(x). f(x) is the density that we actually want to sample points from}
 }
@@ -15,7 +15,7 @@ dh(xi, g)
 This function calculate the derivative of h(x), where h(x) is the log of functions
 }
 \examples{
-dh(xi,g,leftb,rightb)
-dh(c(1,2,3),dnorm,-4,4)
+dh(x,g)
+dh(c(1,2,3),dnorm)
 }
 

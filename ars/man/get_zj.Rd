@@ -4,20 +4,20 @@
 \alias{get_zj}
 \title{Intersection points zj}
 \usage{
-get_zj(xj, hj, slopes)
+get_zj(x_values, y_values, slopes)
 }
 \arguments{
-\item{xj}{sorted points in T, which contains k abscissae in the domain D}
+\item{x_values}{sorted points in T, which contains k abscissae in the domain D}
 
-\item{hj}{evaluated h at xj, where h = log g(x). g is the density function used to perform the rejection sampling}
+\item{y_values}{evaluated h at x_values, where h = log g(x). g is the density function used to perform the rejection sampling}
 
-\item{slopes}{slope of h evaluated at xj; they are the outputs of dh function calculated at x1 through xk}
+\item{slopes}{slope of h evaluated at x_values; they are the outputs of dh function calculated at x1 through xk}
 }
 \description{
 This function returns the intersection points generated from piecewise linear upper hull
 }
 \examples{
-get_zj(xj, hj, slopes)
+get_zj(x_values, y_values, slopes)
 get_zj(c(1,2,3), c(4,8,12), c(1, 0,-1))
 }
 
