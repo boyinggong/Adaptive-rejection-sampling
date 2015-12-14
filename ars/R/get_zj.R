@@ -10,7 +10,7 @@
 #' get_zj(c(1,2,3), c(4,8,12), c(1, 0,-1))
 
 get_zj <- function(x_values, y_values, slopes) {
-    #if (length(x_values) != length(y_values) | length(x_values) != length(slopes) | length(y_values) != length(slopes)) stop("inputs should have the same length")
+    if (length(x_values) != length(y_values) | length(x_values) != length(slopes) | length(y_values) != length(slopes)) stop("inputs should have the same length")
     if (length(x_values) <=1 | length(y_values) <=1 | length(slopes) <=1) stop("input should have a length at least 2")
     
     n <- length(x_values)
