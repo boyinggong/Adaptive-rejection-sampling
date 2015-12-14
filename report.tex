@@ -11,6 +11,7 @@
 \usepackage{listings}
 \usepackage{mathtools}
 \usepackage[utf8]{inputenc}
+\usepackage{float}
 
 
 \title{STAT 243 Final Project\\Implementation of an Adaptive-Rejection Sampling Method}
@@ -76,10 +77,7 @@ This uses a vectorized formulation to compute \(l(x)\) by using a boolean operat
 Takes advantage of an explicit form of the inverse cumulative distribution function for an exponential (given that all \(u(x)\) are linear, and thus the integral of \(\exp(u(x))\) can be computed explicitly (i.e. without use of any integration packages).
 \end{enumerate}
 
-From here, we 
-
-
-\end{enumerate}
+From here, we sample using \(s_k(x)\).  The procedure, as implemented, is fairly straightforward.  To begin, we select one of the pieces of the piecewise exponential probability distribution function by normalizing the curve, drawing a random value from the uniform distribution on [0, 1], and choosing the largest segment index such that the total integral value from the lowest domain to that region's upper bound is greater than the randomly drawn value.  Then, based on the normalized sub-region, use the inverse CDF for the exponential (again, this can be explicitly solved), using another random variable draw from the uniform distribution on [0, 1].  This value can then be accepted or rejected using the squeezing or rejection tests which is the final step implemented by ars.R.  Once we have selected enough values (as defined by the user), we return the array of numbers.
 
 \section{Results/Examples}
 
@@ -87,9 +85,27 @@ We provide some basic results in addition to the extensive testing of each funct
 
 \subsection{Normal Distribution}
 
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{figure/normal.png}
+  \caption{The Normal Distribution.}
+  \label{fig:d1}
+\end{figure}
+
 \subsection{Chi-Squared Distribution}
 
-\subsection{Truncated Normal Distribution}
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{figure/normal.png}
+  \caption{The Chi-Squared Distribution.}
+  \label{fig:d2}
+\end{figure}
+
+\subsection{Blank Distribution}
+
+\begin{figure}[H]
+  \includegraphics[width=\linewidth]{figure/normal.png}
+  \caption{The Blank Distribution}
+  \label{fig:d3}
+\end{figure}
 
 \section{Roll the Credits}
 
@@ -99,6 +115,8 @@ Max Gardner developed auxillary functions for ARS, lead the documentation effort
 Alexander Brandt wrote an initial implementation of the ARS and \LaTeX'd up the final report.  He is a computational biologist interested in worms, humans, and what they have in common (and what they don't!).\\
 
 \section{Citations}
+1. Gilks, W. R., and P. Wild. ``Adaptive Rejection Sampling for Gibbs Sampling''. Journal of the Royal Statistical Society. Series C (Applied Statistics) 41.2 (1992): 337--348.\\\\
+2. Wild, P., and Gilks, W. R.  ``Algorithm AS 287: Adaptive Rejection Sampling from Log-Concave Density Functions''. Journal of the Royal Statistical Society. Series C (Applied Statistics) 42.4 (1993): 701--709.
 
 
 
