@@ -61,8 +61,23 @@ These are the squeezing test and rejection test, respectively.  As we continue t
 
 In order to create a modular solution, we have created several helper functions in various files which are called by ars in ars.R in an order described above.
 \begin{enumerate}
+
+\item dh.R\\\\
+The derivative of h is of critical importance throughout this procedure.  To implement, we use a dh method that takes advantage of numerical derivation (via numericDeriv in the stats package) to find our tangents.\\
 \item find\_init.R\\\\
-Though it would always be best for the user, who has a better understanding of the distribution, to supply their initial points, it was our intention that the program perform well even in cases when the user did not.  To this end, ars.R begins by calling find\_init.R
+Though it would always be best for the user, who has a better understanding of the distribution, to supply their initial points, it was our intention that the program perform well even in cases when the user did not.  To this end, ars.R begins by calling find\_init.R\\
+\item get\_zj.R\\\\
+To compute the intersection between our tangents, we use get\_zj.R.  It computes all the intersections given various \(x_i\)'s from the formula given above.\\
+\item upper\_piecewise.R\\\\
+This uses a vectorized formulation to compute \(u(x)\) by using a boolean operation based on \(x\)'s range, the range of \(z_i\), to compute the correct piece (i.e. only the relevant line segment for a given range will be used to compete \(u(x)\).
+\item lower\_piecewise.R\\\\
+This uses a vectorized formulation to compute \(l(x)\) by using a boolean operation based on \(x\)'s range, the range of \(z_i\), to compute the correct piece (i.e. only the relevant line segment for a given range will be used to compete \(l(x)\).  (The only difference is that this is the lower chord hull, and that for points between the domains an the first and last \(x_i\), a large negative number returned as the constant value.
+\item sk.R\\\\
+Takes advantage of an explicit form of the inverse cumulative distribution function for an exponential (given that all \(u(x)\) are linear, and thus the integral of \(\exp(u(x))\) can be computed explicitly (i.e. without use of any integration packages).
+\end{enumerate}
+
+From here, we 
+
 
 \end{enumerate}
 
@@ -78,10 +93,10 @@ We provide some basic results in addition to the extensive testing of each funct
 
 \section{Roll the Credits}
 
-Ye Zhi \\
-Boying Gong \\
-Max Gardner developed auxillary functions for ARS, lead the documentation effort, and rolled everything up into a nice and neat R package. He is a first-year MS/PhD student in Civil Systems.\\
-Alexander Brandt wrote an initial implementation of the ARS and \LaTeX'd up the final report.  He is a computational biologist interested in worms, humans, and what they have in common (and what they don't!).  \\
+Ye Zhi \\\\
+Boying Gong \\\\
+Max Gardner developed auxillary functions for ARS, lead the documentation effort, and rolled everything up into a nice and neat R package. He is a first-year MS/PhD student in Civil Systems.\\\\
+Alexander Brandt wrote an initial implementation of the ARS and \LaTeX'd up the final report.  He is a computational biologist interested in worms, humans, and what they have in common (and what they don't!).\\
 
 \section{Citations}
 
