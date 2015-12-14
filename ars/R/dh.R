@@ -10,7 +10,7 @@
 
 dh <- function(x,g) {
     x <- as.numeric(x)
-    #grad <- numericDeriv(quote(log(g(x))),"x")
-    #return(attr(grad,"gradient"))
-    return(mosaic::D(log(g(x)) ~ x)(x))
+    grad <- numericDeriv(quote(log(g(x))),"x")
+    return(attr(grad,"gradient"))
+    #return(mosaic::D(log(g(x)) ~ x)(x))
 }
