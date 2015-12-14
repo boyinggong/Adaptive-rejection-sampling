@@ -7,6 +7,8 @@
 lower_piecewise(x, x_values, y_values, domains)
 }
 \arguments{
+\item{x}{x-coordinate value}
+
 \item{x_values}{sorted points in T, which contains k abscissae in the domain D}
 
 \item{y_values}{evaluated h at x_values, where h = log g(x). g is the density function used to perform the rejection sampling}

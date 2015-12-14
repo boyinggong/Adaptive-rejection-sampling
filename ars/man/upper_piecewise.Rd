@@ -7,6 +7,8 @@
 upper_piecewise(x, x_intercepts, y_values, slopes, domains)
 }
 \arguments{
+\item{x}{x-coordinate value}
+
 \item{x_intercepts}{sorted points in T, which contains k abscissae in the domain D}
 
 \item{y_values}{evaluated h at x_intercepts, where h = log g(x). g is the density function used to perform the rejection sampling}
@@ -16,7 +18,8 @@ upper_piecewise(x, x_intercepts, y_values, slopes, domains)
 \item{domains}{domain D, which contains the lower bound and the upper bound}
 }
 \description{
-This function returns the piecewise linear upper hulls from the tangents to h(x) at the abscissae x_intercepts in Tk
+This function returns the piecewise linear upper hulls from the tangents 
+to h(x) at the abscissae x_intercepts in Tk
 }
 \examples{
 upper_piecewise(x, x_intercepts, y_values, slopes, domains)

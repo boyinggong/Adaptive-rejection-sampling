@@ -7,14 +7,15 @@
 ars(g, my_total_range, n)
 }
 \arguments{
-\item{g}{the probability density distribution to sample from}
+\item{g}{the probability density distribution from which samples are drawn}
 
-\item{my_total_range}{support of the probability density distribution}
+\item{my_total_range}{the user-defined domain of the probability density distribution}
 
-\item{n}{number of observations.}
+\item{n}{desired number of observations to be returned}
 }
 \description{
-This function generate random numbers from given distribution using adaptive rejection sampling method.
+This function generates random numbers from a user-defined distribution density function 
+using the adaptive rejection sampling method.
 }
 \examples{
 ars(dnorm, c(-Inf,Inf), n = 10000)
