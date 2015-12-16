@@ -4,19 +4,23 @@
 \alias{ars}
 \title{Generate random numbers using adaptive rejection sampling}
 \usage{
-ars(g, my_total_range, n)
+ars(fun, my_total_range, n, ...)
 }
 \arguments{
-\item{g}{the probability density distribution to sample from}
+\item{fun}{the probability density distribution to sample from}
 
 \item{my_total_range}{support of the probability density distribution}
 
-\item{n}{number of observations.}
+\item{n}{number of observations}
+
+\item{...}{other values passed to fun}
 }
 \description{
 This function generate random numbers from given distribution using adaptive rejection sampling method.
 }
 \examples{
 x = ars(dnorm, c(-Inf,Inf), n = 100)
+x = ars(dnorm, c(-Inf,Inf), n = 100, mean = 2, sd = 4)
+x = ars(dchisq, c(1,Inf), n = 1000, df = 3)
 }
 

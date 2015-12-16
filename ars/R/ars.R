@@ -2,20 +2,25 @@
 #'
 #' This function generate random numbers from given distribution using adaptive rejection sampling method.
 #'
-#' @param g the probability density distribution to sample from
+#' @param fun the probability density distribution to sample from
 #' @param my_total_range support of the probability density distribution
-#' @param n number of observations.
+#' @param n number of observations
+#' @param ... other values passed to fun
 #' @export 
 #' @examples
 #' x = ars(dnorm, c(-Inf,Inf), n = 100)
+#' x = ars(dnorm, c(-Inf,Inf), n = 100, mean = 2, sd = 4)
+#' x = ars(dchisq, c(1,Inf), n = 1000, df = 3)
 
 
-ars <- function(g, my_total_range, n) {
+ars <- function(fun, my_total_range, n, ...) {
     
-    if (!is.numeric(my_total_range)) stop("input range is not numeric")
-    if (length(my_total_range)!=2) stop("input range length error")
-    if (n%%1 != 0 | n < 1) stop("sample size should be positive integer")
+    if (!is.numeric(my_total_range)) stop("Input range is not numeric")
+    if (length(my_total_range)!=2) stop("Input range length error")
+    if (n%%1 != 0 | n < 1) stop("Sample size should be positive integer")
+    if (my_total_range[1] >= my_total_range[2]) stop("Invalid support")
     
+    g <- function(x){fun(x, ...)}
     
     MAX_HOLDING <- 1000
     sampled_values <- rep(NaN,n)
