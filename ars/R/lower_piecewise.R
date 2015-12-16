@@ -2,18 +2,20 @@
 #'
 #' This function returns the piecewise linear lower hull formed from the chords between adjacent abscissae in Tk
 #'
-#' @param x
+#' @param x the points we want to evaluate at
 #' @param x_values sorted points in T, which contains k abscissae in the domain D
 #' @param y_values evaluated h at x_values, where h = log g(x). g is the density function used to perform the rejection sampling
 #' @param domains domain D, which contains the lower bound and the upper bound
-#' @examples
-#' lower_piecewise(x, x_values, y_values, domains)
-#' lower_piecewise
 
+# The lower piecewise function
 lower_piecewise <- function(x, x_values, y_values, domains) {
-    if (length(x_values) != length(y_values)) stop("inputs should have the same length")
-    if ((length(x_values) <=1) | (length(y_values) <=1)) stop("input should have a length at least 2")
-    
+  
+  if (length(x_values) != length(y_values) | 
+      length(domains) - 1 != length(y_values))
+    stop("inputs length inconsistent")
+  if (x < domains[1] | x > domains[length(domains)])
+    stop("inputs are not defined on the given domain")
+  
     ux <- ((x < x_values[1]) | (x > x_values[length(x_values)])) * -100
     n <- length(x_values)-1
     u <- ((x > x_values[1:n]) & (x <= x_values[2:(n+1)])) *

@@ -14,8 +14,4 @@ dh(x, g)
 \description{
 This function calculate the derivative of h(x), where h(x) is the log of functions
 }
-\examples{
-dh(x,g)
-dh(c(1,2,3),dnorm)
-}
 

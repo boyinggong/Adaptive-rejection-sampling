@@ -1,17 +1,9 @@
-# Hello, world!
-#
-# This is an example function named 'hello' 
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Ctrl + Shift + B'
-#   Check Package:             'Ctrl + Shift + E'
-#   Test Package:              'Ctrl + Shift + T'
+#' Find the initial points
+#'
+#' This function finds the initial points of the adptive rejection sampling.
+#'
+#' @param g the density function used to perform the rejection sampling, where g(x) = cf(x). f(x) is the density that we actually want to sample points from
+#' @param my_total_range support of the probability density distribution
 
 find_init <- function(g, my_total_range){
     h <- function(x) { log(g(x)) }
@@ -43,7 +35,7 @@ find_init <- function(g, my_total_range){
                 x1 = x1 - 1
                 have_found = dh(x1, g) > 0
             }
-            return(c(x1-0.01, my_total_range[2]-0.01))
+            return(c(x1-1e-4, my_total_range[2]-1e-4))
         }
     }else if (my_total_range[1] != -Inf & my_total_range[2] == Inf){
         if(dh(my_total_range[1], g) < 0) return(c(my_total_range[1]+1, my_total_range[1]+2))
@@ -54,7 +46,7 @@ find_init <- function(g, my_total_range){
                 x2 = x2 + 1
                 have_found = dh(x2, g) < 0
             }
-            return(c(my_total_range[1]+0.01, x2+0.01))
+            return(c(my_total_range[1]+1e-4, x2+1e-4))
         }
     }else{
         return(c(2/3*my_total_range[1]+1/3*my_total_range[2],

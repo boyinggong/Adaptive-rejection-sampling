@@ -18,8 +18,4 @@ sk(xj, hj, dhj, my_domains)
 \description{
 This function calculate the piecewise integral of the upper hull function.
 }
-\examples{
-sk(xj, hj, dhj, my_domains)
-sk(c(-1/2, 1/2), c(-1/2, 1/2), c(-1, 1), c(-1, 0,  1))
-}
 

@@ -3,6 +3,8 @@ context("Sk")
 test_that("special cases are correct", {
   print("special cases are correct")
   expect_equal(sk(c(-1/2, 1/2), c(-1/2, 1/2), c(-1, 1), c(-1, 0,  1)), c(exp(0)-exp(-1), (exp(1)-exp(0))))
+  # when slops contains zero values
+  expect_equal(sk(c(1/3, 2/3), c(0, 0), c(0, 0), c(0, 0.5, 1)), c(1/2, 1/2))
 })
 
 test_that("throw errors for inputs error", {

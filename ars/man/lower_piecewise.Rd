@@ -7,7 +7,7 @@
 lower_piecewise(x, x_values, y_values, domains)
 }
 \arguments{
-\item{x}{x-coordinate value}
+\item{x}{the points we want to evaluate at}
 
 \item{x_values}{sorted points in T, which contains k abscissae in the domain D}
 
@@ -17,9 +17,5 @@ lower_piecewise(x, x_values, y_values, domains)
 }
 \description{
 This function returns the piecewise linear lower hull formed from the chords between adjacent abscissae in Tk
-}
-\examples{
-lower_piecewise(x, x_values, y_values, domains)
-lower_piecewise
 }
 

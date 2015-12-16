@@ -16,8 +16,4 @@ get_zj(x_values, y_values, slopes)
 \description{
 This function returns the intersection points generated from piecewise linear upper hull
 }
-\examples{
-get_zj(x_values, y_values, slopes)
-get_zj(c(1,2,3), c(4,8,12), c(1, 0,-1))
-}
 

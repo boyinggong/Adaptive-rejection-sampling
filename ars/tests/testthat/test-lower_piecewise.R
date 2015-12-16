@@ -1,13 +1,15 @@
 context("Lower piecewise function")
 
-test_that("special cases are correct", {
-    print("special cases are correct")
-    expect_equal(lower_piecewise(2,c(1,2,3,4), c(5,6,7,8), c(-4,4)),6)
-})
-
 test_that("throw errors for inputs error", {
-    print("throw errors when vector length is not consistent")
-    expect_error(lower_piecewise(2,c(1,2), c(5,6,7,8), c(-4,4)), "input length inconsistent")
-    print("throw errors when number of points is less than 2")
-    expect_error(lower_piecewise(2,1, 5, c(-4,4)), "number of points should be greater than 2")
+  print("throw errors when input x are not within the domain")
+  expect_error(lower_piecewise(2, c(1,2), c(5,7), c(3,4,5)), 
+               "inputs are not defined on the given domain")
+  expect_error(lower_piecewise(2,c(1,2), c(5,7), c(-1,0,1)), 
+               "inputs are not defined on the given domain")
+  
+  print("throw errors when inputs length inconsistent")
+  expect_error(lower_piecewise(2,c(1,2), c(5,6), c(-4,4,5,6)), 
+               "inputs length inconsistent")
+  expect_error(lower_piecewise(2,c(1,2), c(5,6,7), c(-4,4,5)), 
+               "inputs length inconsistent")
 })
