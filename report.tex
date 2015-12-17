@@ -12,6 +12,7 @@
 \usepackage{mathtools}
 \usepackage[utf8]{inputenc}
 \usepackage{float}
+\usepackage{hyperref}
 
 
 \title{STAT 243 Final Project\\Implementation of an Adaptive-Rejection Sampling Method}
@@ -29,6 +30,10 @@
 \begin{document}
 
 \maketitle
+
+\section{Project URL}
+
+\url{https://github.com/boyinggong/243FinalProject}
 
 \section{Theory}
 
@@ -60,24 +65,51 @@ These are the squeezing test and rejection test, respectively.  As we continue t
 
 \section{Implementation}
 
-In order to create a modular solution, we have created several helper functions in various files which are called by ars in ars.R in an order described above.
+In order to create a modular solution, we have created several helper functions in various files which are called by ars in ars.R in an order described above.  Our code was made modular, portable, and testable by use of functions that define each subroutine in the ARS calculation.
+
 \begin{enumerate}
 
 \item dh.R\\\\
+Arguments: an x value to evaluate, a function \(g\)\\\\
+Returns: \(g'(x)\)\\\\
 The derivative of h is of critical importance throughout this procedure.  To implement, we use a dh method that takes advantage of numerical derivation (via numericDeriv in the stats package) to find our tangents.\\
+
 \item find\_init.R\\\\
+Arguments: a function \(g\), and a list specifying the range it is defined on\\\
+Returns: a list of two entries corresponding to the left and right starting hull \(x_i\)'s.\\\\
 Though it would always be best for the user, who has a better understanding of the distribution, to supply their initial points, it was our intention that the program perform well even in cases when the user did not.  To this end, ars.R begins by calling find\_init.R\\
+
 \item get\_zj.R\\\\
+Arguments: x values of hull points, y values (h(x)'s) of hull points, slope of the hull points\\\\
+Returns: a list of all intersection points (\(z_j\)'s)\\\\
 To compute the intersection between our tangents, we use get\_zj.R.  It computes all the intersections given various \(x_i\)'s from the formula given above.\\
+
 \item upper\_piecewise.R\\\\
+Arguments: an x to evaluate, the x values of hull points, y values (h(x)'s) of hull points, slope of the hull points, and the total domain of the probability distribution function\\\\
+Returns: u(x)\\\\
 This uses a vectorized formulation to compute \(u(x)\) by using a boolean operation based on \(x\)'s range, the range of \(z_i\), to compute the correct piece (i.e. only the relevant line segment for a given range will be used to compete \(u(x)\).
+
 \item lower\_piecewise.R\\\\
+Arguments: an x to evaluate, the x values of hull points, y values (h(x)'s) of hull points, and the total domain of the probability distribution function\\\\
+Returns: l(x)\\\\
 This uses a vectorized formulation to compute \(l(x)\) by using a boolean operation based on \(x\)'s range, the range of \(z_i\), to compute the correct piece (i.e. only the relevant line segment for a given range will be used to compete \(l(x)\).  (The only difference is that this is the lower chord hull, and that for points between the domains an the first and last \(x_i\), a large negative number returned as the constant value.
+
 \item sk.R\\\\
-Takes advantage of an explicit form of the inverse cumulative distribution function for an exponential (given that all \(u(x)\) are linear, and thus the integral of \(\exp(u(x))\) can be computed explicitly (i.e. without use of any integration packages).
+Arguments: the x values of hull points, y values (h(x)'s) of hull points, and the regions defined by \(z_{j=1,...,N-1}\) as well as the bounds of the probability distribution function\\\\
+Returns: a list of the non-normalized integral values of each piecewise exponential\\\\
+Takes advantage of an explicit form of the inverse cumulative distribution function for an exponential (given that all \(u(x)\) are linear, and thus the integral of \(\exp(u(x))\) can be computed explicitly (i.e. without use of any integration packages).\\
+
 \end{enumerate}
 
-From here, we sample using \(s_k(x)\).  The procedure, as implemented, is fairly straightforward.  To begin, we select one of the pieces of the piecewise exponential probability distribution function by normalizing the curve, drawing a random value from the uniform distribution on [0, 1], and choosing the largest segment index such that the total integral value from the lowest domain to that region's upper bound is greater than the randomly drawn value.  Then, based on the normalized sub-region, use the inverse CDF for the exponential (again, this can be explicitly solved), using another random variable draw from the uniform distribution on [0, 1].  This value can then be accepted or rejected using the squeezing or rejection tests which is the final step implemented by ars.R.  Once we have selected enough values (as defined by the user), we return the array of numbers.
+From here, we sample using \(s_k(x)\).  The procedure, as implemented, is fairly straightforward.  To begin, we select one of the pieces of the piecewise exponential probability distribution function by normalizing the curve, drawing a random value from the uniform distribution on [0, 1], and choosing the largest segment index such that the total integral value from the lowest domain to that region's upper bound is greater than the randomly drawn value.  Then, based on the normalized sub-region we sample a value \(x^t\) using the inverse CDF for the exponential (again, this can be explicitly solved), using another random variable \(u\) drawn from the uniform distribution on [0, 1].  More explicitly:
+
+\[ u = \int_{z_i}^{x^t} exp(k_i (x - x_i) + y_i) dx = \left. \frac{exp(k (x - x_i )+ y_i)}{k} \right|_{z_i}^{x^t} \] 
+
+Where \(u\) is our randomly generated number, \(x_i\), \(y_i\), and \(k_i\) are the x value, y value, and slope of the hull point, and \(z_i\) is the lower bound of the region of the piecewise exponential we are drawing from.  We can now easily solve to find our sampled value of \(x^t\).  This value can then be accepted or rejected using the squeezing or rejection tests which is the final step implemented by ars.R.    A limit is also placed on how many hull points can exist for a given simulation.  Once we have selected enough values (as defined by the user), we return the array of numbers.
+
+\section{Testing}
+
+Boying fills this in.
 
 \section{Results/Examples}
 
@@ -86,7 +118,8 @@ We provide some basic results in addition to the extensive testing of each funct
 \subsection{Normal Distribution}
 
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{figure/normal.png}
+\centering
+  \includegraphics[scale=.25]{figure/normal.jpeg}
   \caption{The Normal Distribution.}
   \label{fig:d1}
 \end{figure}
@@ -94,16 +127,27 @@ We provide some basic results in addition to the extensive testing of each funct
 \subsection{Chi-Squared Distribution}
 
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{figure/normal.png}
-  \caption{The Chi-Squared Distribution.}
+\centering
+  \includegraphics[scale=.25]{figure/chi_squared_dof3.jpeg}
+  \caption{The Chi-Squared Distribution with 3 Degrees of Freedom}
   \label{fig:d2}
 \end{figure}
 
-\subsection{Blank Distribution}
+\subsection{Uniform Distribution}
 
 \begin{figure}[H]
-  \includegraphics[width=\linewidth]{figure/normal.png}
-  \caption{The Blank Distribution}
+\centering
+  \includegraphics[scale=.25]{figure/uniform.jpeg}
+  \caption{The Uniform Distribution on [0,1]}
+  \label{fig:d3}
+\end{figure}
+
+\subsection{Exponential Distribution}
+
+\begin{figure}[H]
+\centering
+  \includegraphics[scale=.25]{figure/exponential.jpeg}
+  \caption{The Exponential Distribution, with \(\lambda = 1\).}
   \label{fig:d3}
 \end{figure}
 
