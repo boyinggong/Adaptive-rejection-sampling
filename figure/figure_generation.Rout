@@ -92,10 +92,10 @@ _R_CHECK_FORCE_SUGGESTS_: FALSE
 Checking ars -------------------------------------------------------------------
 '/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file --no-environ  \
   --no-save --no-restore CMD check  \
-  '/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T//RtmpARRN7P/ars_0.5.tar.gz'  \
+  '/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T//RtmpNR0t7g/ars_0.5.tar.gz'  \
   --as-cran --timings 
 
-* using log directory ‘/private/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T/RtmpARRN7P/ars.Rcheck’
+* using log directory ‘/private/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T/RtmpNR0t7g/ars.Rcheck’
 * using R version 3.2.2 (2015-08-14)
 * using platform: x86_64-apple-darwin13.4.0 (64-bit)
 * using session charset: UTF-8
@@ -115,7 +115,9 @@ Checking ars -------------------------------------------------------------------
 * checking installed package size ... OK
 * checking package directory ... OK
 * checking DESCRIPTION meta-information ... OK
-* checking top-level files ... OK
+* checking top-level files ... NOTE
+Non-standard file/directory found at top level:
+  ‘Rplots.pdf’
 * checking for left-over files ... OK
 * checking index information ... OK
 * checking package subdirectories ... OK
@@ -149,23 +151,37 @@ Checking ars -------------------------------------------------------------------
 * checking PDF version of manual ... OK
 * DONE
 
-Status: OK
+Status: 1 NOTE
+See
+  ‘/private/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T/RtmpNR0t7g/ars.Rcheck/00check.log’
+for details.
+
 
 > 
-> sv <- ars(dnorm, c(-Inf,Inf), n = 100000, MAX_HOLDING = 100)
+> sv <- ars(dnorm, c(-Inf,Inf), n = 100000, MAX_HOLDING = 100000)
 > hist(sv, col='blue', prob=TRUE, breaks=100, xlim=c(-3,3), xlab = "x", main="Histogram of Values Sampled with ARS")
 > x <- seq(-4,4,.01)
 > lines(x, dnorm(x),lty=5,lwd=2,col="red")
-> legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = .75)
+> legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 0.7)
 > 
-> 
-> sv <- ars(dunif, c(0,1), n = 100000)
+> sv <- ars(dunif, c(0,1), n = 100000, nGroup = 1000)
 > hist(sv, col='blue', prob=TRUE, breaks=50, xlab = "x", main="Histogram of Values Sampled with ARS")
 > x <- seq(0,1,.01)
 > lines(x, dunif(x),lty=5,lwd=2,col="red")
-> legend("bottomright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 1.1)
+> legend("bottomright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 0.7)
 > 
+> sv <- ars(dexp, c(0,Inf), n = 1000, rate=1, nGroup = 10)
+> hist(sv, col='blue', prob=TRUE, breaks=100, xlim = c(0,3), xlab = "x", main="Histogram of Values Sampled with ARS")
+> x <- seq(0,6,.01)
+> lines(x, dexp(x),lty=5,lwd=2,col="red")
+> legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 0.7)
 > 
-> sv <- ars(dexp, c(0,Inf), n = 100000, rate=1)
-
-Execution halted
+> sv <- ars(dchisq, c(0.0,Inf), n = 100000, df = 3)
+> hist(sv, col='blue', prob=TRUE, breaks=100, xlim = c(0,12), xlab = "x", main="Histogram of Values Sampled with ARS")
+> x <- seq(0,12,.01)
+> lines(x, dchisq(x, df = 3),lty=5,lwd=2,col="red")
+> legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 0.7)
+> 
+> proc.time()
+   user  system elapsed 
+ 52.354   3.049  55.717 
