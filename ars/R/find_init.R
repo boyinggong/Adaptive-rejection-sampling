@@ -27,7 +27,7 @@ find_init <- function(g, my_total_range){
             return(c(x1, x))
         }
     }else if (my_total_range[1] == -Inf & my_total_range[2] != Inf){
-        if(dh(my_total_range[2], g) > 0) return(c(my_total_range[2]-1, my_total_range[2]-2))
+        if(dh(my_total_range[2]-1e-3, g) > 0) return(c(my_total_range[2]-1, my_total_range[2]-2))
         else{
             x1 = my_total_range[2]
             have_found = FALSE
@@ -35,10 +35,10 @@ find_init <- function(g, my_total_range){
                 x1 = x1 - 1
                 have_found = dh(x1, g) > 0
             }
-            return(c(x1-1e-4, my_total_range[2]-1e-4))
+            return(c(x1-1e-3, my_total_range[2]-1e-3))
         }
     }else if (my_total_range[1] != -Inf & my_total_range[2] == Inf){
-        if(dh(my_total_range[1], g) < 0) return(c(my_total_range[1]+1, my_total_range[1]+2))
+        if(dh(my_total_range[1]+1e-3, g) < 0) return(c(my_total_range[1]+1, my_total_range[1]+2))
         else{
             x2 = my_total_range[1]
             have_found = FALSE
@@ -46,7 +46,7 @@ find_init <- function(g, my_total_range){
                 x2 = x2 + 1
                 have_found = dh(x2, g) < 0
             }
-            return(c(my_total_range[1]+1e-4, x2+1e-4))
+            return(c(my_total_range[1]+1e-3, x2+1e-3))
         }
     }else{
         return(c(2/3*my_total_range[1]+1/3*my_total_range[2],

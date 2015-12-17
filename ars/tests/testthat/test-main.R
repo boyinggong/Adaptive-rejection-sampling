@@ -48,13 +48,38 @@ test_that("special cases are correct", {
                       function(x) {ptrunc(x, "beta", a = 1/4, b = 3/4, 2, 2)})$p.value > 0.05)
 
   print("test uniform")
-  expect_true(ks.test(ars(dunif, c(0,1), n = 10000), punif)$p.value > 0.05)
+  expect_true(ks.test(ars(dunif, c(0,1), n = 1000), punif)$p.value > 0.05)
   
   print("test Exponential")
-  expect_true(ks.test(ars(dexp, c(0,Inf), n = 10000), pexp)$p.value > 0.05)
+  expect_true(ks.test(ars(dexp, c(0,Inf), n = 1000), pexp)$p.value > 0.05)
   expect_true(ks.test(ars(dchisq, c(0,Inf), n = 1000, df = 2), 
                       function(x) {ptrunc(x, "chisq", a = 0, b = Inf, df=2)})$p.value > 0.05)  
   
+})
+
+test_that("main sampling function works when sampling more than one sample based on the upper envolope",{
+  cat("\nmain sampling function works when sampling more than one sample based on the upper envolope\n")
+  print("test normal")
+  expect_true(ks.test(ars(dnorm, c(-Inf,Inf), n = 1000, nGroup = 2), 
+                      pnorm)$p.value > 0.05)
+  expect_true(ks.test(ars(dnorm, c(-Inf,Inf), n = 1000, nGroup = 10), 
+                      pnorm)$p.value > 0.05)
+  print("test Chi square")
+  expect_true(ks.test(ars(dchisq, c(0,Inf), n = 1000, nGroup = 2, df = 3), 
+                      function(x) {pchisq(x, df=3)})$p.value > 0.05)
+  expect_true(ks.test(ars(dchisq, c(0,Inf), n = 1000, nGroup = 10, df = 3), 
+                      function(x) {pchisq(x, df=3)})$p.value > 0.05)
+  print("test Beta when df1 > 1, df2 > 1")
+  expect_true(ks.test(ars(dbeta, c(0,1), n = 1000, nGroup = 2, shape1 = 2, shape2 = 2),
+                      function(x) {pbeta(x, 2, 2)})$p.value > 0.05)
+  expect_true(ks.test(ars(dbeta, c(0,1), n = 1000, nGroup = 10, shape1 = 2, shape2 = 2),
+                      function(x) {pbeta(x, 2, 2)})$p.value > 0.05)
+  print("test uniform")
+  expect_true(ks.test(ars(dunif, c(0,1), n = 1000, nGroup = 2), punif)$p.value > 0.05)
+  expect_true(ks.test(ars(dunif, c(0,1), n = 1000, nGroup = 10), punif)$p.value > 0.05)
+  print("test Exponential")
+  expect_true(ks.test(ars(dexp, c(0,Inf), n = 1000, nGroup = 2), pexp)$p.value > 0.05)
+  expect_true(ks.test(ars(dexp, c(0,Inf), n = 1000, nGroup = 10), pexp)$p.value > 0.05)
 })
 
 test_that("throw error when density is not concave", {
@@ -75,7 +100,7 @@ test_that("throw error when density is not concave", {
 })
 
 test_that("throw error when inputs error", {
-  print("throw error when inputs error")
+  cat("\nthrow error when inputs error\n")
   expect_error(ars(dnorm, c("c",Inf), n = 10000), 
                "Input range is not numeric")
   expect_error(ars(dnorm, c(1, 2, 3), n = 10000), 

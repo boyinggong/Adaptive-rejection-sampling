@@ -1,13 +1,15 @@
 Package: ars
 Type: Package
 Title: Adaptive Rejection Sampling
-Version: 0.6
+Version: 0.5
 Date: 2015-12-01
 Author: Ye Zhi, Boying Gong, Max Gardner, Alexander Brandt
-Maintainer: Max Gardner <magardner@berkeley.edu>
-Description: This package implements a function, ars, that generates random numbers from a user-defined distribution using an adaptive rejection sampling algorithm.
-License: BDS
+Maintainer: Boying Gong <jorothy_gong@berkely.edu>
+Description: Use adptive rejection sampling method to draw samples from distributions with log-concave density.
+License: Unlimited
 LazyData: TRUE
 RoxygenNote: 5.0.1
-Suggests: testthat, mosaic
-Depends: numDeriv
+Suggests: testthat
+Imports: numDeriv
+NeedsCompilation: no
+Packaged: 2015-12-17 05:15:29 UTC; jorothygong

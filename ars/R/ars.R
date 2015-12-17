@@ -5,8 +5,9 @@
 #' @param fun the probability density distribution to sample from
 #' @param my_total_range support of the probability density distribution
 #' @param n number of observations
-#' @param ... other values passed to fun
 #' @param MAX_HOLDING maximum number of points we can include in the hull.
+#' @param nGroup number of samples generate at once from the upper hull
+#' @param ... other values passed to fun
 #' @export 
 #' @examples
 #' x = ars(dnorm, c(-Inf,Inf), n = 100)
@@ -14,7 +15,7 @@
 #' x = ars(dchisq, c(1,Inf), n = 1000, df = 3)
 
 
-ars <- function(fun, my_total_range, n, MAX_HOLDING = 1000, ...) {
+ars <- function(fun, my_total_range, n, MAX_HOLDING = 1000, nGroup = 1, ...) {
     
     if (!is.numeric(my_total_range)) stop("Input range is not numeric")
     if (length(my_total_range)!=2) stop("Input range length error")
@@ -52,66 +53,44 @@ ars <- function(fun, my_total_range, n, MAX_HOLDING = 1000, ...) {
         # Now get the cumsum of the normal values
         cs_normalized_integral_values <- c(cumsum(normalized_integral_values))
         
-        # Use a random variable.  This will pick which k in s_k are are choosing
-        # from.
-        ur <- runif(min=0,max=1,n=1)
+        gen_res <- sapply(rep(1, nGroup) , function(x){gen_xt(cs_normalized_integral_values, integral_values,
+                          my_points, my_values, my_slopes, domains)})
+        xt <- gen_res[1, ]
+        fx <- gen_res[2, ]
+        ux <- gen_res[3, ]
         
-        # ri is "region index" -- i.e. which segment of s we are in
-        ri <- min(which(cs_normalized_integral_values >= ur))
-        
-        # if (min(which(cs_normalized_integral_values >= ur)) == Inf) browser()
-        
-        # The the uniform random variable for the inverse CDF of s_i(x)
-        ur <- runif(min=0,max=1,n=1)
-        # the slope
-        s <- my_slopes[ri]
-        # re-normalizing factor
-        nrmlztn <- 1/integral_values[ri]
-        
-        # This is the functional form for the inverse cdf.
-        if (s == 0){
-          xt <- ur * integral_values[ri] / exp(my_values[ri]) + domains[ri]
-        }else{
-          xt <- log(((s * ur)/(nrmlztn * exp(my_values[ri] - s * my_points[ri]))) + 
-                      exp(s * domains[ri])) / s
-        }
-        # The upper hull evaluated at xt
-        fx <- upper_piecewise(x = xt,
-        x_intercepts = my_points,
-        y_values = my_values,
-        slopes = my_slopes,
-        domains = domains)
-        # The lower hull evaluated at xt
-        ux <- lower_piecewise(x = xt,
-        x_values = my_points,
-        y_values = my_values,
-        domains = domains)
-        
-        if (fx - ux < -1e-9){
+        if (!all(fx - ux > -1e-9)){
           stop("Please check the log-concavity of probability density function")
         } 
         
         # The selection criterea random variable (last random variable)
-        w <- runif(min = 0, max = 1, n = 1)
+        w <- runif(min = 0, max = 1, n = nGroup)
+        
+        select_n <- which(w - (exp(ux - fx)) > 0)
         
         # The two checks asked about in the paper
-        if (w <= (exp(ux - fx))){
-            sampled_values[total_chosen] <- xt
-            total_chosen <- total_chosen+1
+        if (length(select_n) == 0){
+            sampled_values[total_chosen:(total_chosen + nGroup - 1)] <- xt
+            total_chosen <- total_chosen + nGroup
         }else{
-            # Otherwise, maybe select or update the hull
-            if (w <= (exp(h(xt) - fx))){
-                sampled_values[total_chosen] <- xt
-                total_chosen <- total_chosen+1
-                if (length(my_points) < MAX_HOLDING){
-                    my_points <- sort(c(my_points, xt))
-                    my_slopes <- dh(my_points,g)
-                    my_values <- h(my_points)
-                    domains <- sort(c(total_range, get_zj(x_values = my_points,
-                                                          y_values = my_values, 
-                                                          slopes = my_slopes)))
-                }
-            }
+          # Otherwise, maybe select or update the hull
+          if ((length(my_points) < MAX_HOLDING) & 
+              (xt[select_n[1]] > my_total_range[1] + 1e-4) &
+              (xt[select_n[1]] < my_total_range[2] - 1e-4)){
+            my_points <- sort(c(my_points, xt[select_n[1]]))
+            my_slopes <- dh(my_points,g)
+            my_values <- h(my_points)
+            domains <- sort(c(total_range, get_zj(x_values = my_points,
+                                                  y_values = my_values, 
+                                                  slopes = my_slopes)))
+          }
+          if (w[select_n[1]] - (exp(h(xt[select_n[1]]) - fx[select_n[1]])) <= 0){
+            sampled_values[total_chosen:(total_chosen+select_n[1]-1)] <- xt[1:select_n[1]]
+            total_chosen <- total_chosen+select_n[1]
+          }else if(select_n[1] > 1){
+            sampled_values[total_chosen:(total_chosen+select_n[1]-2)] <- xt[1:select_n[1]-1]
+            total_chosen <- total_chosen + select_n[1] - 1         
+          }
         }
     }
     
