@@ -75,8 +75,8 @@ ars <- function(fun, my_total_range, n, MAX_HOLDING = 1000, nGroup = 1, ...) {
         }else{
           # Otherwise, maybe select or update the hull
           if ((length(my_points) < MAX_HOLDING) & 
-              (xt[select_n[1]] > my_total_range[1] + 1e-4) &
-              (xt[select_n[1]] < my_total_range[2] - 1e-4)){
+              (xt[select_n[1]] > my_total_range[1] + 1e-3) &
+              (xt[select_n[1]] < my_total_range[2] - 1e-3)){
             my_points <- sort(c(my_points, xt[select_n[1]]))
             my_slopes <- dh(my_points,g)
             my_values <- h(my_points)
