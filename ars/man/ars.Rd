@@ -4,7 +4,7 @@
 \alias{ars}
 \title{Generate random numbers using adaptive rejection sampling}
 \usage{
-ars(fun, my_total_range, n, ...)
+ars(fun, my_total_range, n, MAX_HOLDING = 1000, ...)
 }
 \arguments{
 \item{fun}{the probability density distribution to sample from}
@@ -12,6 +12,8 @@ ars(fun, my_total_range, n, ...)
 \item{my_total_range}{support of the probability density distribution}
 
 \item{n}{number of observations}
+
+\item{MAX_HOLDING}{maximum number of points we can include in the hull.}
 
 \item{...}{other values passed to fun}
 }

@@ -18,7 +18,8 @@ test_that("special cases are correct", {
   }
   
   print("test normal and tail truncated normal")
-  expect_true(ks.test(ars(dnorm, c(-Inf,Inf), n = 10000), pnorm)$p.value > 0.05)
+  expect_true(ks.test(ars(dnorm, c(-Inf,Inf), n = 10000), 
+                      pnorm)$p.value > 0.05)
   expect_true(ks.test(ars(dnorm, c(-1,1), n = 1000), 
                       function(x){ptrunc(x, "norm", a = -1, b = 1)})$p.value > 0.05)
   expect_true(ks.test(ars(dnorm, c(-Inf,1), n = 1000), 
@@ -74,9 +75,17 @@ test_that("throw error when density is not concave", {
 })
 
 test_that("throw error when inputs error", {
-  expect_error(ars(dnorm, c("c",Inf), n = 10000), "Input range is not numeric")
-  expect_error(ars(dnorm, c(1, 2, 3), n = 10000), "Input range length error")
-  expect_error(ars(dnorm, c(-Inf, Inf), n = -1), "Sample size should be positive integer")
-  expect_error(ars(dnorm, c(-Inf, Inf), n = 10.5), "Sample size should be positive integer")
-  expect_error(ars(dnorm, c(3, 3), n = 10), "Invalid support")
+  print("throw error when inputs error")
+  expect_error(ars(dnorm, c("c",Inf), n = 10000), 
+               "Input range is not numeric")
+  expect_error(ars(dnorm, c(1, 2, 3), n = 10000), 
+               "Input range length error")
+  expect_error(ars(dnorm, c(-Inf, Inf), n = -1), 
+               "Sample size should be positive integer")
+  expect_error(ars(dnorm, c(-Inf, Inf), n = 10.5), 
+               "Sample size should be positive integer")
+  expect_error(ars(dnorm, c(3, 3), n = 10), 
+               "Invalid support")
+  expect_error(ars(dnorm, c(0, 3), n = 10, MAX_HOLDING = 50), 
+               "Please enter a bigger maximum number of points to include in the hull")
 })

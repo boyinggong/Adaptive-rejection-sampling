@@ -6,6 +6,7 @@
 #' @param my_total_range support of the probability density distribution
 #' @param n number of observations
 #' @param ... other values passed to fun
+#' @param MAX_HOLDING maximum number of points we can include in the hull.
 #' @export 
 #' @examples
 #' x = ars(dnorm, c(-Inf,Inf), n = 100)
@@ -13,16 +14,16 @@
 #' x = ars(dchisq, c(1,Inf), n = 1000, df = 3)
 
 
-ars <- function(fun, my_total_range, n, ...) {
+ars <- function(fun, my_total_range, n, MAX_HOLDING = 1000, ...) {
     
     if (!is.numeric(my_total_range)) stop("Input range is not numeric")
     if (length(my_total_range)!=2) stop("Input range length error")
     if (n%%1 != 0 | n < 1) stop("Sample size should be positive integer")
     if (my_total_range[1] >= my_total_range[2]) stop("Invalid support")
+    if (MAX_HOLDING < 100) stop("Please enter a bigger maximum number of points to include in the hull")
     
     g <- function(x){fun(x, ...)}
     
-    MAX_HOLDING <- 1000
     sampled_values <- rep(NaN,n)
     i <- 1
     h <- function(x) { log(g(x)) }
