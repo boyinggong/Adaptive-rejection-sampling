@@ -1,13 +1,13 @@
 Package: ars
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1
+Title: Adaptive Rejection Sampling
+Version: 0.6
 Date: 2015-12-01
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+Author: Ye Zhi, Boying Gong, Max Gardner, Alexander Brandt
+Maintainer: Max Gardner <magardner@berkeley.edu>
+Description: This package implements a function, ars, that generates random numbers from a user-defined distribution using an adaptive rejection sampling algorithm.
+License: BDS
 LazyData: TRUE
 RoxygenNote: 5.0.1
 Suggests: testthat, mosaic
-# Depends: mosaic
+Depends: numDeriv
