@@ -95,7 +95,7 @@ Returns: l(x)\\\\
 This uses a vectorized formulation to compute \(l(x)\) by using a boolean operation based on \(x\)'s range, the range of \(z_i\), to compute the correct piece (i.e. only the relevant line segment for a given range will be used to compete \(l(x)\).  (The only difference is that this is the lower chord hull, and that for points between the domains an the first and last \(x_i\), a large negative number returned as the constant value.
 
 \item sk.R\\\\
-Arguments: the x values of hull points, y values (h(x)'s) of hull points, and the total domain of the probability distribution function\\\\
+Arguments: the x values of hull points, y values (h(x)'s) of hull points, and the regions defined by \(z_{j=1,...,N-1}\) as well as the bounds of the probability distribution function\\\\
 Returns: a list of the non-normalized integral values of each piecewise exponential\\\\
 Takes advantage of an explicit form of the inverse cumulative distribution function for an exponential (given that all \(u(x)\) are linear, and thus the integral of \(\exp(u(x))\) can be computed explicitly (i.e. without use of any integration packages).\\
 
@@ -105,7 +105,7 @@ From here, we sample using \(s_k(x)\).  The procedure, as implemented, is fairly
 
 \[ u = \int_{z_i}^{x^t} exp(k_i (x - x_i) + y_i) dx = \left. \frac{exp(k (x - x_i )+ y_i)}{k} \right|_{z_i}^{x^t} \] 
 
-Where \(u\) is our randomly generated number, \(x_i\), \(y_i\), and \(k_i\) are the x value, y value, and slope of the hull point, and \(z_i\) is the lower bound of the region of the piecewise exponential we are drawing from.  This value can then be accepted or rejected using the squeezing or rejection tests which is the final step implemented by ars.R.    A limit is also placed on how many hull points can exist for a given simulation.  Once we have selected enough values (as defined by the user), we return the array of numbers.
+Where \(u\) is our randomly generated number, \(x_i\), \(y_i\), and \(k_i\) are the x value, y value, and slope of the hull point, and \(z_i\) is the lower bound of the region of the piecewise exponential we are drawing from.  We can now easily solve to find our sampled value of \(x^t\).  This value can then be accepted or rejected using the squeezing or rejection tests which is the final step implemented by ars.R.    A limit is also placed on how many hull points can exist for a given simulation.  Once we have selected enough values (as defined by the user), we return the array of numbers.
 
 \section{Testing}
 
