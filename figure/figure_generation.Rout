@@ -1,0 +1,171 @@
+
+R version 3.2.2 (2015-08-14) -- "Fire Safety"
+Copyright (C) 2015 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin13.4.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library('devtools')
+> ## replace with your path to ars
+> setwd('~/Dropbox/stat243_final_project/243FinalProject/ars')
+> load_all()
+Loading ars
+> devtools::test()
+Loading ars
+Loading required package: testthat
+Testing ars
+Derivative of logarithm of functions : [1] "special cases is correct"
+..
+Test the find_init function : [1] "left bounded, right unbounded"
+.......[1] "left unbounded, right bounded"
+.....[1] "left unbounded, right unbounded"
+....
+Intersection points : .
+Lower piecewise function : [1] "throw errors when input x are not within the domain"
+..[1] "throw errors when inputs length inconsistent"
+..
+Main sampling function : 
+special cases are correct
+[1] "test normal and tail truncated normal"
+......[1] "test Chi square and tail truncated Chi square when df > 2"
+...[1] "test Beta and tail truncated Beta when df1 > 1, df2 > 1"
+...[1] "test uniform"
+.[1] "test Exponential"
+..
+main sampling function works when sampling more than one sample based on the upper envolope
+[1] "test normal"
+..[1] "test Chi square"
+..[1] "test Beta when df1 > 1, df2 > 1"
+..[1] "test uniform"
+..[1] "test Exponential"
+..
+throw error when density is not concave
+[1] "test student t"
+..[1] "chi square, df = 1"
+.[1] "test F"
+.
+throw error when inputs error
+......
+Sk : [1] "special cases are correct"
+..[1] "throw errors when vector length is not consistent"
+..[1] "throw errors when number of points is less than 2"
+.
+Upper piecewise function : [1] "throw errors when input x are not within the domain"
+..[1] "throw errors when inputs length inconsistent"
+...
+
+DONE 
+> check()
+Updating ars documentation
+Loading ars
+Setting env vars ---------------------------------------------------------------
+CFLAGS  : -Wall -pedantic
+CXXFLAGS: -Wall -pedantic
+Building ars -------------------------------------------------------------------
+'/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file --no-environ  \
+  --no-save --no-restore CMD build  \
+  '/Users/Alex/Dropbox/stat243_final_project/243FinalProject/ars'  \
+  --no-resave-data --no-manual 
+
+* checking for file ‘/Users/Alex/Dropbox/stat243_final_project/243FinalProject/ars/DESCRIPTION’ ... OK
+* preparing ‘ars’:
+* checking DESCRIPTION meta-information ... OK
+* checking for LF line-endings in source and make files
+* checking for empty or unneeded directories
+* building ‘ars_0.5.tar.gz’
+
+Setting env vars ---------------------------------------------------------------
+_R_CHECK_CRAN_INCOMING_ : FALSE
+_R_CHECK_FORCE_SUGGESTS_: FALSE
+Checking ars -------------------------------------------------------------------
+'/Library/Frameworks/R.framework/Resources/bin/R' --no-site-file --no-environ  \
+  --no-save --no-restore CMD check  \
+  '/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T//RtmpARRN7P/ars_0.5.tar.gz'  \
+  --as-cran --timings 
+
+* using log directory ‘/private/var/folders/2g/kmt4vkgn1xlb67lb68yn_3_00000gn/T/RtmpARRN7P/ars.Rcheck’
+* using R version 3.2.2 (2015-08-14)
+* using platform: x86_64-apple-darwin13.4.0 (64-bit)
+* using session charset: UTF-8
+* using option ‘--as-cran’
+* checking for file ‘ars/DESCRIPTION’ ... OK
+* checking extension type ... Package
+* this is package ‘ars’ version ‘0.5’
+* checking package namespace information ... OK
+* checking package dependencies ... OK
+* checking if this is a source package ... OK
+* checking if there is a namespace ... OK
+* checking for executable files ... OK
+* checking for hidden files and directories ... OK
+* checking for portable file names ... OK
+* checking for sufficient/correct file permissions ... OK
+* checking whether package ‘ars’ can be installed ... OK
+* checking installed package size ... OK
+* checking package directory ... OK
+* checking DESCRIPTION meta-information ... OK
+* checking top-level files ... OK
+* checking for left-over files ... OK
+* checking index information ... OK
+* checking package subdirectories ... OK
+* checking R files for non-ASCII characters ... OK
+* checking R files for syntax errors ... OK
+* checking whether the package can be loaded ... OK
+* checking whether the package can be loaded with stated dependencies ... OK
+* checking whether the package can be unloaded cleanly ... OK
+* checking whether the namespace can be loaded with stated dependencies ... OK
+* checking whether the namespace can be unloaded cleanly ... OK
+* checking loading without being on the library search path ... OK
+* checking dependencies in R code ... OK
+* checking S3 generic/method consistency ... OK
+* checking replacement functions ... OK
+* checking foreign function calls ... OK
+* checking R code for possible problems ... OK
+* checking Rd files ... OK
+* checking Rd metadata ... OK
+* checking Rd line widths ... OK
+* checking Rd cross-references ... OK
+* checking for missing documentation entries ... OK
+* checking for code/documentation mismatches ... OK
+* checking Rd \usage sections ... OK
+* checking Rd contents ... OK
+* checking for unstated dependencies in examples ... OK
+* checking examples ... OK
+* checking for unstated dependencies in ‘tests’ ... OK
+* checking tests ...
+  Running ‘testthat.R’
+ OK
+* checking PDF version of manual ... OK
+* DONE
+
+Status: OK
+
+> 
+> sv <- ars(dnorm, c(-Inf,Inf), n = 100000, MAX_HOLDING = 100)
+> hist(sv, col='blue', prob=TRUE, breaks=100, xlim=c(-3,3), xlab = "x", main="Histogram of Values Sampled with ARS")
+> x <- seq(-4,4,.01)
+> lines(x, dnorm(x),lty=5,lwd=2,col="red")
+> legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = .75)
+> 
+> 
+> sv <- ars(dunif, c(0,1), n = 100000)
+> hist(sv, col='blue', prob=TRUE, breaks=50, xlab = "x", main="Histogram of Values Sampled with ARS")
+> x <- seq(0,1,.01)
+> lines(x, dunif(x),lty=5,lwd=2,col="red")
+> legend("bottomright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 1.1)
+> 
+> 
+> sv <- ars(dexp, c(0,Inf), n = 100000, rate=1)
+
+Execution halted
