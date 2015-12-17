@@ -14,7 +14,7 @@ legend("topright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), 
 sv <- ars(dunif, c(3,4), n = 100000, nGroup = 1, min=3, max=4, MAX_HOLDING = 100)
 hist(sv, col='blue', prob=TRUE, breaks=50, xlab = "x", main="Histogram of Values Sampled with ARS")
 x <- seq(3,4,.01)
-lines(x, dunif(x),lty=5,lwd=2,col="red")
+lines(x, dunif(x, min=3, max=4),lty=5,lwd=2,col="red")
 legend("bottomright", c("Sample Values", "Analytical Form"), col=c("blue", "red"), lwd=2, cex = 0.7)
 
 sv <- ars(dexp, c(0,Inf), n = 5000, rate=1, nGroup = 10)
