@@ -109,7 +109,38 @@ Where \(u\) is our randomly generated number, \(x_i\), \(y_i\), and \(k_i\) are 
 
 \section{Testing}
 
-Boying fills this in.
+Tests were run by using devtools::test() as well as testthat's test\_package('ars', 'main').
+
+\begin{enumerate}
+
+\item test-dh.R\\\\
+Checks that deriatives match their expected output for a few specific cases
+
+\item test-find\_init.R\\\\
+Checks the multiple scenearios of bounded/unbounded left and right bounds of probability distribution functions, and ensures their derivatives give the correct slopes.
+
+\item test-get\_zj.R\\\\
+Checks that a test function produces the expected \(z_j\).
+
+\item test-upper\_piecewise.R\\\\
+Checks for inconsitencies with inputs (i.e. x is not within the domain of the function)\\
+Checks for length inconsistency between argument lists
+
+\item test-lower\_piecewise.R\\\\
+Checks for inconsitencies with inputs (i.e. x is not within the domain of the function)\\
+Checks for length inconsistency between argument lists
+
+\item test-sk.R\\\\
+Checks for inconsitency between argument lengths\\
+Checks that specific cases integrate to the correct values.
+
+\item test-main.R\\\\
+Tests sampling from different distributions and ensures that they give a reasonable p-value when compared to their generative function\\
+Checks sampling with a defined nGroup variable (i.e. making each draw more efficent)\\
+Checks for user input errors\\
+Checks that functions with incorrect concavity throw errors
+
+\end{enumerate}
 
 \section{Results/Examples}
 
@@ -154,7 +185,7 @@ We provide some basic results in addition to the extensive testing of each funct
 \section{Roll the Credits}
 
 Ye Zhi wrote the tests and relative documentations for the unit functions. She is a first-year MA student in Statistics. \\\\
-Boying Gong \\\\
+Boying Gong wrote the tests and expanded on the argument options for the various functions. She is a first-year MA student in Statistics.\\\\
 Max Gardner developed auxillary functions for ARS, lead the documentation effort, and rolled everything up into a nice and neat R package. He is a first-year MS/PhD student in Civil Systems.\\\\
 Alexander Brandt wrote an initial implementation of the ARS and \LaTeX'd up the final report.  He is a computational biologist interested in worms, humans, and what they have in common (and what they don't!).\\
 
