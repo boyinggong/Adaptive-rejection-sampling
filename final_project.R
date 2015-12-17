@@ -233,8 +233,14 @@ return(sampled_values)
 my_dchisq <- function(x) { return( dchisq(x,df=3) ) }
 
 sv <- simulate_things(dnorm, c(-Inf,Inf), n = 10000)
-print(length(sv))
-# print(sv)
-histogram(sv, col='blue', prob=TRUE, bw=.5)
-lines(x,my_dchisq(x),type='l')
+hist(sv, col='blue', freq = FALSE)
+x <- seq(-4,4,0.01)
+lines(x,dnorm(x), col = 'red', lwd = 2)
+
+sv <- simulate_things(my_dchisq, c(0,Inf), n = 10000)
+hist(sv, col='blue', freq= FALSE)
+x <- seq(0,20,0.01)
+lines(x,my_dchisq(x), col = 'red', lwd = 2)
+   
+
 
