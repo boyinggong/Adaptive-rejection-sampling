@@ -1,1 +1,1 @@
-# R package implementing adaptive rejection sampleing
+# R package: Adaptive rejection sampling
